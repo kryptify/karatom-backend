@@ -1,0 +1,933 @@
+{
+  "port": 3000,
+  "providerURL": "wss://red-wispy-panorama.bsc-testnet.quiknode.pro/1f80e0f80b30b17b4b1c72a627a816ba4fd53b42/",
+  "chainId": 97,
+  "gasLimit": 500000,
+  "gasPrice": 10000000000,
+  "karatomContractAddress": "0x28335eb48E7fa5Dd1382b512c4927d7E09e7d404",
+  "karatomABI": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "closedTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "OnboardingContractClosed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "farmerId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "documentURL",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "OnboardingContractCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "documentURL",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "officialTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "OnboardingContractOfficial",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "contractType",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "closedTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "ProductContractClosed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "initiatorId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "partnerId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "contractType",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "documentURL",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "createdTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "ProductContractCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "contractType",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "documentURL",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "officialTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "ProductContractOfficial",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "contractId",
+          "type": "uint256"
+        }
+      ],
+      "name": "closeOnboardingContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "contractId",
+          "type": "uint256"
+        }
+      ],
+      "name": "closeProductContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "farmerId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "documentURL",
+          "type": "string"
+        }
+      ],
+      "name": "generateOnboardingContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "initiatorId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "partnerId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "contractType",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "documentURL",
+          "type": "string"
+        }
+      ],
+      "name": "generateProductContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getOnboardingContract",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "farmerId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "documentURL",
+              "type": "string"
+            },
+            {
+              "internalType": "enum SupplyChain.ContractStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "createdTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "officialTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "closedTime",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SupplyChain.OnboardingContract",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getOnboardingContractCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "status",
+          "type": "uint256"
+        }
+      ],
+      "name": "getOnboardingContractCountWithStatus",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getOnboardingContractList",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "farmerId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "documentURL",
+              "type": "string"
+            },
+            {
+              "internalType": "enum SupplyChain.ContractStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "createdTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "officialTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "closedTime",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SupplyChain.OnboardingContract[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "status",
+          "type": "uint256"
+        }
+      ],
+      "name": "getOnboardingContractListWithStatus",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "farmerId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "documentURL",
+              "type": "string"
+            },
+            {
+              "internalType": "enum SupplyChain.ContractStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "createdTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "officialTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "closedTime",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SupplyChain.OnboardingContract[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "status",
+          "type": "uint256"
+        }
+      ],
+      "name": "getOnboardingContractListWithoutStatus",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "farmerId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "documentURL",
+              "type": "string"
+            },
+            {
+              "internalType": "enum SupplyChain.ContractStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "createdTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "officialTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "closedTime",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SupplyChain.OnboardingContract[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getProductContract",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "initiatorId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "partnerId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum SupplyChain.ProductContractType",
+              "name": "contractType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "documentURL",
+              "type": "string"
+            },
+            {
+              "internalType": "enum SupplyChain.ContractStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "createdTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "officialTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "closedTime",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SupplyChain.ProductContract",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "contractType",
+          "type": "uint256"
+        }
+      ],
+      "name": "getProductContractCountWithType",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "contractType",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "status",
+          "type": "uint256"
+        }
+      ],
+      "name": "getProductContractCountWithTypeStatus",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getProductContractList",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "initiatorId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "partnerId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum SupplyChain.ProductContractType",
+              "name": "contractType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "documentURL",
+              "type": "string"
+            },
+            {
+              "internalType": "enum SupplyChain.ContractStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "createdTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "officialTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "closedTime",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SupplyChain.ProductContract[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "productType",
+          "type": "uint256"
+        }
+      ],
+      "name": "getProductContractListWithType",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "initiatorId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "partnerId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum SupplyChain.ProductContractType",
+              "name": "contractType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "documentURL",
+              "type": "string"
+            },
+            {
+              "internalType": "enum SupplyChain.ContractStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "createdTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "officialTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "closedTime",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SupplyChain.ProductContract[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "productType",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "status",
+          "type": "uint256"
+        }
+      ],
+      "name": "getProductContractListWithTypeStatus",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "initiatorId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "partnerId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum SupplyChain.ProductContractType",
+              "name": "contractType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "documentURL",
+              "type": "string"
+            },
+            {
+              "internalType": "enum SupplyChain.ContractStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "createdTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "officialTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "closedTime",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SupplyChain.ProductContract[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "contractId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "documentURL",
+          "type": "string"
+        }
+      ],
+      "name": "signOnboardingContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "contractId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "documentURL",
+          "type": "string"
+        }
+      ],
+      "name": "signProductContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]
+}
