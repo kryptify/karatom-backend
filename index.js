@@ -48,12 +48,12 @@ app.post('/sync_nonce', async function(req, res) {
 })
 
 app.listen(port);
-console.log(`karamtom backend started listening on port ${port}...`)
+console.log(`karatom backend started listening on port ${port}...`)
 
 syncNonceForAccount()
   // .then(() => {
   //   app.listen(port);
-  //   console.log(`karamtom backend started listening on port ${port}...`)
+  //   console.log(`karatom backend started listening on port ${port}...`)
   // })
 
 async function syncNonceForAccount() {
