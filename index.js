@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const Web3 = require('web3');
 
 const contract = require('./contract/contract.js')
-const { port, providerURL } = require("./config.json")
+const { port, providerURL, karatomContractAddress } = require("./config.json")
 const { privateKey } = require("./secrets.json")
 const { saveInfo } = require('./utils.js')
 
@@ -45,6 +45,24 @@ app.post('/sync_nonce', async function(req, res) {
   const response = {success: true, nonce: nonce}
   console.log(response)
   res.json(response)
+})
+
+app.get('/implementation_address', async function(_, res) {
+  try {
+    let address = await web3.eth.getStorageAt(karatomContractAddress, "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc")
+    const response = {
+      success: true,
+      result: {
+        address: address
+      }
+    }
+    console.log(response);
+    res.json(response)
+  }
+  catch (error) {
+    console.log("implementation error: " + error)
+    res.json({sucess: false, error: error.toString()})
+  }
 })
 
 app.listen(port);
