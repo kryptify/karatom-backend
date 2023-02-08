@@ -9,37 +9,47 @@ const { readInfo, saveInfo } = require("../utils.js")
 const web3 = new Web3(providerURL)
 
 /**
- * GET - /contract/onboarding
- * @dev get the list of onboarding contracts with params
- * @param withStatus(query) the status of the contracts to get
- * @param withoutStatus(query) the status of the contracts not to get
- * @return returns the list of onboarding contracts under the params' condition
+ * GET - /contract/product
+ * @dev get the list of product contracts with params
+ * @param type(query) the type of the contracts to get
+ * @param status(query) the status of the contracts to get
+ * @return returns the list of product contracts under the params' condition
+ * @note it does not retrieve product contracts only with status filter
  */
 router.get('/', async function(req, res){
   
   const account = web3.eth.accounts.privateKeyToAccount(privateKey);
   const contract = new web3.eth.Contract(karatomABI, karatomContractAddress)
-  const { withStatus, withoutStatus } = req.query
+  const { type, status } = req.query
   let functionName
   try {
     let contractList
-    if (withStatus) {
-      functionName = "getOnboardingContractListWithStatus"
-      contractList = await contract.methods.getOnboardingContractListWithStatus(withStatus).call({ from: account.address })
+    if (type && status) {
+      functionName = "getProductContractListWithTypeStatus"
+      contractList = await contract.methods.getProductContractListWithTypeStatus(type, status).call({ from: account.address })
     }
-    else if (withoutStatus) {
-      functionName = "getOnboardingContractListWithoutStatus"
-      contractList = await contract.methods.getOnboardingContractListWithoutStatus(withoutStatus).call({ from: account.address })
+    else if (type) {
+      functionName = "getProductContractListWithType"
+      contractList = await contract.methods.getProductContractListWithType(type).call({ from: account.address })
+    }
+    else if (status) {
+      const issue = "it can't retrieve product contracts with only status"
+      const response = {success: false, error: issue}
+      console.log(response)
+      res.json(response)
+      return
     }
     else {
-      functionName = "getOnboardingContractList"
-      contractList = await contract.methods.getOnboardingContractList().call({ from: account.address })
+      functionName = "getProductContractList"
+      contractList = await contract.methods.getProductContractList().call({ from: account.address })
     }
     
     const responseList = contractList.map((contract_) => {
       return {
         id: contract_.id_,
-        farmerId: contract_.farmerId,
+        initiatorId: contract_.initiatorId,
+        partnerId: contract_.partnerId,
+        contractType: contract_.contractType,
         documentURL: contract_.documentURL,
         status: contract_.status,
         createdTime: contract_.createdTime,
@@ -58,27 +68,32 @@ router.get('/', async function(req, res){
 })
 
 /**
- * GET - /contract/onboarding/count
- * @dev get the count of onboarding contracts with params
+ * GET - /contract/product/count
+ * @dev get the count of product contracts with params
+ * @param type(query) the type of the contracts to get
  * @param status(query) the status of the contracts to get
- * @return returns the count of onboarding contracts with the status under the params' condition,
- * if there is no status in query params, it will return the count of all onboarding contracts
+ * @return returns the count of product contracts under the params' condition,
+ * @note it does not retrieve the count of product contracts only with status filter
  */
 router.get('/count', async function(req, res){
   
   const account = web3.eth.accounts.privateKeyToAccount(privateKey);
   const contract = new web3.eth.Contract(karatomABI, karatomContractAddress)
-  let { status } = req.query
+  let { type, status } = req.query
   let functionName
   try {
     let contractCount;
-    if (status) {
-      functionName = "getOnboardingContractCountWithStatus"
-      contractCount = await contract.methods.getOnboardingContractCountWithStatus(status).call({ from: account.address })
+    if (type && status) {
+      functionName = "getProductContractCountWithTypeStatus"
+      contractCount = await contract.methods.getProductContractCountWithTypeStatus(type, status).call({ from: account.address })
+    }
+    else if (type) {
+      functionName = "getProductContractCountWithType"
+      contractCount = await contract.methods.getProductContractCountWithType(type).call({ from: account.address })
     }
     else {
-      functionName = "getOnboardingContractCount"
-      contractCount = await contract.methods.getOnboardingContractCount().call({ from: account.address })
+      functionName = "getProductContractCount"
+      contractCount = await contract.methods.getProductContractCount().call({ from: account.address })
     }
     
     const response = {success: true, result: contractCount}
@@ -92,7 +107,7 @@ router.get('/count', async function(req, res){
 })
 
 /**
- * GET - /contract/onboarding/:id
+ * GET - /contract/product/:id
  * @dev get the details of the contract with the id
  * @param id contract id to get details of
  * @return returns the details of contract with the contract id
@@ -103,12 +118,14 @@ router.get('/:id', async function(req, res){
   const contract = new web3.eth.Contract(karatomABI, karatomContractAddress)
 
   try {
-    const contract_ = await contract.methods.getOnboardingContract(id).call({ from: account.address })
+    const contract_ = await contract.methods.getProductContract(id).call({ from: account.address })
     const response = {
       success: true,
       result: {
         id: contract_.id_,
-        farmerId: contract_.farmerId,
+        initiatorId: contract_.initiatorId,
+        partnerId: contract_.partnerId,
+        contractType: contract_.contractType,
         documentURL: contract_.documentURL,
         status: contract_.status,
         createdTime: contract_.createdTime,
@@ -120,23 +137,25 @@ router.get('/:id', async function(req, res){
     res.json(response)
   }
   catch (error) {
-    console.log("getOnboardingContract error: " + error)
+    console.log("getProductContract error: " + error)
     res.json({sucess: false, error: error.toString()})
   }
 })
 
 /**
- * POST - /contract/onboarding
- * @dev Create a new onboarding contract
- * @param farmerId(body) farmer's id of the onboarding contract
- * @param documentURL(body) onboarding contract document's url
+ * POST - /contract/product
+ * @dev Create a new product contract
+ * @param initiatorId(body) id of the user who initiate the product contract
+ * @param partnerId(body) id of the user who agrees the product contract
+ * @param contractType(body) id of the contract type
+ * @param documentURL(body) the url of the contract document
  * @return returns the details of the new contract
  */
 router.post('/', async function(req, res){
-  const { farmerId, documentURL } = req.body
+  const { initiatorId, partnerId, contractType, documentURL } = req.body
 
   const contract = new web3.eth.Contract(karatomABI, karatomContractAddress)
-  const transaction = contract.methods.generateOnboardingContract(farmerId, documentURL)
+  const transaction = contract.methods.generateProductContract(initiatorId, partnerId, contractType, documentURL)
   const encodedABI = transaction.encodeABI()
 
   const { nonce } = readInfo()
@@ -155,22 +174,24 @@ router.post('/', async function(req, res){
   saveInfo({nonce: nonce + 1})
 
   let responded = false
-  contract.once("OnboardingContractCreated", function(error, event) {
+  contract.once("ProductContractCreated", function(error, event) {
     if (responded) {
       return
     }
     if (error) {
-      console.log("OnboardingContractCreated error: " + error)
+      console.log("ProductContractCreated error: " + error)
       res.json({sucess: false, error: error.toString()})
       responded = true
       return
     }
-    const { id, farmerId, documentURL, createdTime } = event.returnValues
+    const { id, initiatorId, partnerId, contractType, documentURL, createdTime } = event.returnValues
     const response = {
       success: true,
       result: {
         id: id.toString(),
-        farmerId: farmerId.toString(),
+        initiatorId: initiatorId.toString(),
+        partnerId: partnerId.toString(),
+        contractType: contractType.toString(),
         documentURL: documentURL.toString(),
         createdTime: createdTime.toString()
       }
@@ -184,14 +205,14 @@ router.post('/', async function(req, res){
     await web3.eth.sendSignedTransaction(signed.rawTransaction)
   }
   catch (error) {
-    console.log("generateOnboardingContract error: " + error)
+    console.log("generateProductContract error: " + error)
     res.json({sucess: false, error: error.toString()})
   }
   responded = true
 })
 
 /**
- * POST - /contract/onboarding/sign
+ * POST - /contract/product/sign
  * @dev To update the contract status as official
  * @param contractId(body) contract id to sign
  * @param documentURL(body) the url of the signed document
@@ -200,7 +221,7 @@ router.post('/sign', async function(req, res){
   const { contractId, documentURL } = req.body
 
   const contract = new web3.eth.Contract(karatomABI, karatomContractAddress)
-  const transaction = contract.methods.signOnboardingContract(contractId, documentURL)
+  const transaction = contract.methods.signProductContract(contractId, documentURL)
   const encodedABI = transaction.encodeABI()
 
   const { nonce } = readInfo()
@@ -219,23 +240,25 @@ router.post('/sign', async function(req, res){
   saveInfo({nonce: nonce + 1})
 
   let responded = false
-  contract.once("OnboardingContractOfficial", function(error, event) {
+  contract.once("ProductContractOfficial", function(error, event) {
     if (responded) {
       return
     }
     if (error) {
-      console.log("OnboardingContractOfficial error: " + error)
+      console.log("ProductContractOfficial error: " + error)
       res.json({sucess: false, error: error.toString()})
       responded = true
       return
     }
     const contractId_ = event.returnValues.id
+    const contractType = event.returnValues.contractType
     const documentURL_ = event.returnValues.documentURL
     const officialTime = event.returnValues.officialTime
     const response = {
       success: true,
       result: {
         contractId: contractId_.toString(),
+        contractType: contractType.toString(),
         documentURL: documentURL_.toString(),
         officialTime: officialTime.toString()
       }
@@ -249,14 +272,14 @@ router.post('/sign', async function(req, res){
     await web3.eth.sendSignedTransaction(signed.rawTransaction)
   }
   catch (error) {
-    console.log("signOnboardingContract error: " + error)
+    console.log("signProductContract error: " + error)
     res.json({sucess: false, error: error.toString()})
   }
   responded = true
 })
 
 /**
- * POST - /contract/onboarding/close
+ * POST - /contract/product/close
  * @dev To update the contract status as closed
  * @param contractId(body) contract id to close
  */
@@ -264,7 +287,7 @@ router.post('/close', async function(req, res){
   const { contractId } = req.body
 
   const contract = new web3.eth.Contract(karatomABI, karatomContractAddress)
-  const transaction = contract.methods.closeOnboardingContract(contractId)
+  const transaction = contract.methods.closeProductContract(contractId)
   const encodedABI = transaction.encodeABI()
 
   const { nonce } = readInfo()
@@ -283,22 +306,24 @@ router.post('/close', async function(req, res){
   saveInfo({nonce: nonce + 1})
 
   let responded = false
-  contract.once("OnboardingContractClosed", function(error, event) {
+  contract.once("ProductContractClosed", function(error, event) {
     if (responded) {
       return
     }
     if (error) {
-      console.log("OnboardingContractClosed error: " + error)
+      console.log("ProductContractClosed error: " + error)
       res.json({sucess: false, error: error.toString()})
       responded = true
       return
     }
     const contractId_ = event.returnValues.id
+    const contractType = event.returnValues.contractType
     const closedTime = event.returnValues.closedTime
     const response = {
       success: true,
       result: {
         contractId: contractId_.toString(),
+        contractType: contractType.toString(),
         closedTime: closedTime.toString()
       }
     }
@@ -311,7 +336,7 @@ router.post('/close', async function(req, res){
     await web3.eth.sendSignedTransaction(signed.rawTransaction)
   }
   catch (error) {
-    console.log("closeOnboardingContract error: " + error)
+    console.log("closeProductContract error: " + error)
     res.json({sucess: false, error: error.toString()})
   }
   responded = true

@@ -1,6 +1,5 @@
 {
-  "port": 80,
-  "providerURL": "wss://red-wispy-panorama.bsc-testnet.quiknode.pro/1f80e0f80b30b17b4b1c72a627a816ba4fd53b42/",
+  "port": 3000,
   "chainId": 97,
   "gasLimit": 500000,
   "gasPrice": 10000000000,
@@ -608,6 +607,19 @@
           "internalType": "struct SupplyChain.ProductContract",
           "name": "",
           "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getProductContractCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",

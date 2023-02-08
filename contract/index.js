@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router();
+const setup = require('./setup.js')
 const onboarding = require('./onboarding.js')
+const product = require('./product.js')
 
+router.use('/setup', setup)
 router.use('/onboarding', onboarding)
-
-router.get('/', function(req, res){
-  res.send('GET contract');
-})
+router.use('/product', product)
 
 module.exports = router;
