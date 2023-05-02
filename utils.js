@@ -5,6 +5,12 @@ const { privateKey, providerURL } = require("./secrets.json")
 
 const web3 = new Web3(providerURL)
 
+const defaultInfo = {
+  "nonce": 0, 
+  "gasLimit": 500000,
+  "gasPrice": 5000000000
+}
+
 const saveInfo = (info) => {
   const data = JSON.stringify(info)
   try {
@@ -23,14 +29,16 @@ const readInfo = () => {
   }
   catch (err) {
     console.log(`Error reading info file: ${err}`)
+    return defaultInfo
   }
 }
 
 const syncNonceForAccount = async () => {
   console.log("synchronizing nonce...")
+  const info = readInfo()
   const account = web3.eth.accounts.privateKeyToAccount(privateKey)
   const nonce = await web3.eth.getTransactionCount(account.address)
-  saveInfo({nonce: nonce})
+  saveInfo({...info, nonce: nonce})
   console.log("synchronized. nonce is " + nonce)
   return nonce
 }

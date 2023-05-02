@@ -11,6 +11,11 @@
 .env.test.local
 .env.production.local
 
+config.bsc_testnet.json
+config.mumbai_testnet.json
+secrets.bsc_testnet.json
+secrets.mumbai_testnet.json
+/transaction/index.mumbai.js
 
 npm-debug.log*
 yarn-debug.log*
