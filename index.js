@@ -31,10 +31,7 @@ app.use('/config', config)
 //   ca: fs.readFileSync('/etc/letsencrypt/live/directvalue.com/chain.pem')
 // }
 
-// https.createServer(options, function (req, res) {
-//   res.writeHead(200)
-//   res.end('Welcome to Secured HerbalMining Server!\n')
-// }).listen(port)
+// https.createServer(options, app).listen(port)
 
 app.listen(port)
 console.log(`HerbalMining backend started listening on port ${port}...`)

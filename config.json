@@ -1,7 +1,7 @@
 {
   "port": 3000,
   "chainId": 97,
-  "contractAddress": "0x37EB32f14f645c01b4198F63e2bad6062a991966",
+  "contractAddress": "0x4339C0e71372Db94626905E33DE74DE3C432Fb4A",
   "abi": [
     {
       "anonymous": false,
@@ -194,30 +194,6 @@
       ],
       "name": "TransactionTransporting",
       "type": "event"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "a",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "b",
-          "type": "string"
-        }
-      ],
-      "name": "compareStrings",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "pure",
-      "type": "function"
     },
     {
       "inputs": [

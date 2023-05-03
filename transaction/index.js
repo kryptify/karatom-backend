@@ -28,8 +28,7 @@ router.get('/', async function(req, res){
 
     for (let i = 0; i < transactionList.length; i++) {
       const trx = transactionList[i]
-      console.log({trx})
-      
+
       if (kind && trx.kind !== kind) {continue}
       if (source && trx.source !== source) {continue}
       if (target && trx.target !== target) {continue}
