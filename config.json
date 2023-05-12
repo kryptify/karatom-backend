@@ -2,6 +2,7 @@
   "port": 3000,
   "chainId": 97,
   "contractAddress": "0x4339C0e71372Db94626905E33DE74DE3C432Fb4A",
+  "exploreURL": "https://testnet.bscscan.com/",
   "abi": [
     {
       "anonymous": false,

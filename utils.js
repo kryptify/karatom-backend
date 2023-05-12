@@ -2,6 +2,7 @@ const fs = require('fs')
 const Web3 = require('web3');
 
 const { privateKey, providerURL } = require("./secrets.json")
+const { exploreURL, contractAddress } = require("./config.json")
 
 const web3 = new Web3(providerURL)
 
@@ -43,4 +44,8 @@ const syncNonceForAccount = async () => {
   return nonce
 }
 
-module.exports = { saveInfo, readInfo, syncNonceForAccount };
+const getChainExploreURL = () => {
+  return exploreURL + "address/" + contractAddress + "#readProxyContract"
+}
+
+module.exports = { saveInfo, readInfo, syncNonceForAccount, getChainExploreURL };

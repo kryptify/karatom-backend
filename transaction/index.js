@@ -4,7 +4,7 @@ const Web3 = require('web3');
 
 const { chainId, contractAddress, abi} = require("../config.json")
 const { providerURL, privateKey } = require("../secrets.json")
-const { readInfo, saveInfo, syncNonceForAccount } = require("../utils.js")
+const { readInfo, saveInfo, getChainExploreURL } = require("../utils.js")
 
 const web3 = new Web3(providerURL)
 
@@ -151,26 +151,9 @@ router.post('/', async function(req, res){
 
   saveInfo({...info, nonce: info.nonce+1})
 
-  let responded = false
-  contract.once("TransactionReserved", function(error, event) {
-    if (responded) {
-      return
-    }
-    if (error) {
-      console.log("TransactionReserved error: " + error)
-      res.json({sucess: false, error: error.toString()})
-      responded = true
-      return
-    }
-    const { 
-      transaction_id, 
-      amount,
-      kind,
-      source,
-      target,
-      last_activity_date
-    } = event.returnValues
-    
+  try {
+    await web3.eth.sendSignedTransaction(signed.rawTransaction)
+
     const response = {
       success: true,
       result: {
@@ -179,22 +162,18 @@ router.post('/', async function(req, res){
         kind: kind,
         source: source,
         target: target,
-        last_activity_date: last_activity_date
+        last_activity_date: last_activity_date,
+        explore_url: getChainExploreURL()
       }
     }
+
     console.log(response)
     res.json(response)
-    responded = true
-  })
-
-  try {
-    await web3.eth.sendSignedTransaction(signed.rawTransaction)
   }
   catch (error) {
     console.log("createTransaction error: " + error)
     res.json({sucess: false, error: error.toString()})
   }
-  responded = true
 })
 
 /**
@@ -225,49 +204,24 @@ router.post('/transport', async function(req, res){
 
   saveInfo({...info, nonce: info.nonce+1})
 
-  let responded = false
-  contract.once("TransactionTransporting", function(error, event) {
-    if (responded) {
-      return
-    }
-    if (error) {
-      console.log("TransactionTransporting error: " + error)
-      res.json({sucess: false, error: error.toString()})
-      responded = true
-      return
-    }
-    const {
-      transaction_id,
-      amount,
-      kind,
-      source,
-      target,
-      last_activity_date
-    } = event.returnValues
+  try {
+    await web3.eth.sendSignedTransaction(signed.rawTransaction)
+
     const response = {
       success: true,
       result: {
         transaction_id: transaction_id,
-        amount: amount,
-        kind: kind,
-        source: source,
-        target: target,
-        last_activity_date: last_activity_date
+        last_activity_date: last_activity_date,
+        explore_url: getChainExploreURL()
       }
     }
     console.log(response)
     res.json(response)
-    responded = true
-  })
-
-  try {
-    await web3.eth.sendSignedTransaction(signed.rawTransaction)
   }
   catch (error) {
     console.log("transportTransaction error: " + error)
     res.json({sucess: false, error: error.toString()})
   }
-  responded = true
 })
 
 /**
@@ -310,54 +264,26 @@ router.post('/complete', async function(req, res){
 
   saveInfo({...info, nonce: info.nonce+1})
 
-  let responded = false
-  contract.once("TransactionCompleted", function(error, event) {
-    if (responded) {
-      return
-    }
-    if (error) {
-      console.log("TransactionCompleted error: " + error)
-      res.json({sucess: false, error: error.toString()})
-      responded = true
-      return
-    }
-    const {
-      transaction_id,
-      amount,
-      kind,
-      source,
-      target,
-      last_activity_date,
-      invoice_url,
-      reserved_field
-    } = event.returnValues
+  try {
+    await web3.eth.sendSignedTransaction(signed.rawTransaction)
 
     const response = {
       success: true,
       result: {
         transaction_id: transaction_id,
-        amount: amount,
-        kind: kind,
-        source: source,
-        target: target,
         last_activity_date: last_activity_date,
         invoice_url: invoice_url,
-        reserved_field: reserved_field
+        reserved_field: reserved_field,
+        explore_url: getChainExploreURL()
       }
     }
     console.log(response)
     res.json(response)
-    responded = true
-  })
-
-  try {
-    await web3.eth.sendSignedTransaction(signed.rawTransaction)
   }
   catch (error) {
     console.log("completeTransaction error: " + error)
     res.json({sucess: false, error: error.toString()})
   }
-  responded = true
 })
 
 module.exports = router;
